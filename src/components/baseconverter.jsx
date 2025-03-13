@@ -8,7 +8,7 @@ const BaseConverter = () => {
     const [convertedValue, setConvertedValue] = useState('');
     const [incrementValue, setIncrementValue] = useState(1);
     const [decrementValue, setDecrementValue] = useState(1);
-    const [allowChars, setAllowCharValue] = useState(False);
+    const [allowChars, setAllowChars] = useState(false);
     
     // Available bases
     const baseOptions = [
@@ -40,7 +40,12 @@ const BaseConverter = () => {
     
     // Handle base1 change
     const handleBase1Change = (e) => {
-        setBase1(e.target.value);
+        const newBase = e.target.value;
+        setBase1(newBase);
+        
+        // Check if the selected base value is > 10
+        const baseValue = baseOptions.find(b => b.name === newBase)?.value || 10;
+        setAllowChars(baseValue > 10);
     };
     
     // Handle base2 change
@@ -92,13 +97,39 @@ const BaseConverter = () => {
 
     // Handle input change
     const handleInputChange = (e) => {
-        setInputValue(e.target.value);
+        const value = e.target.value;
+        const baseValue = baseOptions.find(b => b.name === base1)?.value || 10;
+        
+        // Create regex pattern based on the current base
+        let validPattern;
+        if (baseValue <= 10) {
+            // For bases up to 10, only allow digits 0 to (base-1)
+            validPattern = new RegExp(`^[0-${baseValue-1}]*$`);
+        } else if (baseValue === 16) {
+            // For hex, allow 0-9 and A-F
+            validPattern = /^[0-9A-Fa-f]*$/;
+        } else {
+            // For other higher bases
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const allowedLetters = letters.substring(0, baseValue - 10);
+            validPattern = new RegExp(`^[0-9${allowedLetters}]*$`, 'i');
+        }
+        
+        // Only update state if input matches pattern or is empty
+        if (validPattern.test(value) || value === '') {
+            setInputValue(value.toUpperCase()); // Convert to uppercase for clarity
+        }
     };
 
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        const value = parseInt(inputValue);
+        if (inputValue === '') return;
+        
+        const baseValue = baseOptions.find(b => b.name === base1)?.value || 10;
+        // Use the correct base when parsing
+        const value = parseInt(inputValue, baseValue);
+        
         if (!isNaN(value)) {
             setCount(value);
         }
@@ -175,7 +206,7 @@ const BaseConverter = () => {
                     {/* Direct input form */}
                     <form onSubmit={handleSubmit} className="mb-4">
                         <input
-                            type="number"
+                            type={allowChars ? "text" : "number"}
                             value={inputValue}
                             onChange={handleInputChange}
                             className="p-2 border rounded mr-2"
