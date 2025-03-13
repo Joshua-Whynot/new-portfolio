@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Hero from './components/hero';
+import Tools from './components/tools'
+
 
 function App() {
   return (
@@ -11,7 +13,7 @@ function App() {
         <Routes>
           {/* Add your routes here */}
           <Route path="/" element={<Hero />} />
-
+          <Route path="/tools" element={<Tools />} />
         </Routes>
       </main>
     </>
