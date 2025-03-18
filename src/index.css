@@ -1,5 +1,29 @@
 @import 'tailwindcss';
 
+@tailwind utilities;
+
+@custom-variant dark (.dark &, .dark * &);
+
+@layer base {
+}
+
+/* Define your CSS variables */
+:root {
+  --text: #000000;
+  --background: #ffffff;
+  --primary: #3B82F6;
+  --secondary: #EF4444;
+  --accent: #10B981;
+}
+
+.dark {
+  --text: #ffffff;
+  --background: #121212;
+  --primary: #60A5FA;
+  --secondary: #F87171;
+  --accent: #34D399;
+}
+
 * {
   font-family: 'Manrope', serif;
 }
