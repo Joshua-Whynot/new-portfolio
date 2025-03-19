@@ -19,39 +19,39 @@ const Navbar = ({ darkMode, setDarkMode }) => {
   };
   
   return (
-    <nav className="bg-gray-800 dark:bg-black shadow-lg">
+    <nav className="bg-transparent shadow-sm">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between">
-          <div className="flex space-x-4">
-            {/* Logo */}
-            <div>
-              <NavLink to="/" className="flex items-center py-5 px-2 text-white">
-                <span className="font-bold text-xl">Portfolio</span>
-              </NavLink>
-            </div>
-            
-            {/* Desktop Navigation - Using map */}
-            <div className="hidden md:flex items-center space-x-1">
+        <div className="flex justify-between items-center">
+          {/* Logo on the left */}
+          <div>
+            <NavLink to="/" className="flex items-center py-5 px-2 text-white">
+              <span className="font-bold text-xl">Portfolio</span>
+            </NavLink>
+          </div>
+          
+          {/* Navigation items on the right */}
+          <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <NavLink 
                   key={item.path}
                   to={item.path} 
                   className={({ isActive }) => 
-                    isActive ? "py-5 px-3 text-white bg-gray-700" : "py-5 px-3 text-white hover:text-gray-300"
+                    isActive 
+                      ? "py-2 px-3 text-white font-medium border-b-2 border-white" 
+                      : "py-2 px-3 text-gray-300 hover:text-white"
                   }
                 >
                   {item.name}
                 </NavLink>
               ))}
             </div>
-          </div>
-          
-          {/* Right Side Menu with Dark Mode Toggle */}
-          <div className="flex items-center">
+            
             {/* Dark Mode Toggle Button */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-700 dark:bg-gray-600 text-white mr-2"
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white"
               aria-label="Toggle Dark Mode"
             >
               {darkMode ? (
@@ -65,9 +65,9 @@ const Navbar = ({ darkMode, setDarkMode }) => {
               )}
             </button>
 
-            {/* Mobile Navigation Button */}
+            {/* Mobile menu button */}
             <div className="md:hidden">
-              <button onClick={() => setIsOpen(!isOpen)} className="mobile-menu-button p-2 rounded-md text-gray-400 hover:text-white focus:outline-none">
+              <button onClick={() => setIsOpen(!isOpen)} className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none">
                 <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
                 </svg>
@@ -77,14 +77,16 @@ const Navbar = ({ darkMode, setDarkMode }) => {
         </div>
       </div>
       
-      {/* Mobile Navigation Menu - Using map */}
-      <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
+      {/* Mobile Navigation Menu */}
+      <div className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white dark:bg-gray-800 shadow-lg`}>
         {navItems.map((item) => (
           <NavLink 
             key={item.path}
             to={item.path} 
             className={({ isActive }) => 
-              isActive ? "block py-2 px-4 text-sm text-white bg-gray-700" : "block py-2 px-4 text-sm text-white hover:bg-gray-700"
+              isActive 
+                ? "block py-2 px-4 text-sm text-gray-800 dark:text-white bg-gray-100 dark:bg-gray-700" 
+                : "block py-2 px-4 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
             }
             onClick={() => setIsOpen(false)}
           >
